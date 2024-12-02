@@ -1,0 +1,7 @@
+  /* Mobile-first styles */
+  @media (min-width: 768px) {
+    /* Desktop styles */
+    .jumbotron {
+      padding: 40px;
+    }
+  }
