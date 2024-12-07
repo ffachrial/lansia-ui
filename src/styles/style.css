@@ -1,13 +1,70 @@
-/* Base styles */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-  }
-  
-  /* Jumbotron styles */
-  .jumbotron {
-    background-color: #f0f0f0;
-    padding: 20px;
-    text-align: center;
-  }
+@import url('https://fonts.googleapis.com/css2?family=Raleway&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  font-family: Raleway, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  padding: 10px;
+  color: black;
+  background-color: yellow;
+  text-align: center;
+}
+
+main {
+  padding: 16px;
+}
+
+.form-group {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.form-group form {
+  width: 100%;
+  max-width: 400px; /* Ensures input matches the list's size */
+}
+
+input {
+  font-family: Raleway, sans-serif;
+  width: 100%;
+  background: #f5f1ff;
+  border: 2px solid black;
+  border-radius: 15px;
+  padding: 16px;
+  font-size: 24px;
+  box-sizing: border-box;
+  margin: 8px 0;
+}
+
+.list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.list > * {
+  padding: 4px 8px;
+  border: 1px solid #333;
+  text-align: center;
+}
+
+.note-item {
+  border-radius: 8px;
+}
+
+footer {
+  padding: 5px;
+  color: black;
+  background-color: yellow;
+  text-align: center;
+}

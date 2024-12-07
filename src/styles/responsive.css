@@ -1,7 +1,63 @@
-  /* Mobile-first styles */
-  @media (min-width: 768px) {
-    /* Desktop styles */
-    .jumbotron {
-      padding: 40px;
-    }
+/* responsive.css */
+
+/* Smartphone Styles */
+@media (max-width: 768px) {
+  .jumbotron {
+    padding: 15px;
   }
+
+  .container {
+    padding: 15px;
+  }
+
+  form input,
+  form textarea {
+    padding: 8px;
+  }
+
+  button {
+    font-size: 0.9em;
+  }
+
+  .note-item {
+    padding: 8px;
+  }
+}
+
+/* Desktop Styles */
+@media (min-width: 769px) {
+  body {
+    flex-direction: column; /* Stack elements vertically */
+    align-items: center; /* Center elements horizontally */
+  }
+
+  .jumbotron {
+    width: 95%;
+    margin: 20px auto 20px auto; /* Center horizontally */
+    border-radius: 10px;
+    padding: 30px;
+    margin-bottom: 20px;
+  }
+
+  .container {
+    max-width: 600px;
+  }
+
+  #notesList {
+    display: flex;
+    flex-direction: column;
+    max-width: 600px;
+  }
+
+  .note-item {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 12px;
+  }
+
+  .list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+}
