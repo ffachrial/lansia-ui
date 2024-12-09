@@ -28,10 +28,21 @@ class ResidentItem extends HTMLElement {
         return this._resident;
     }
 
+    _updateStyle() {
+        this._style.textContent = `
+            :host {
+                border-radius: 8px;
+            }
+        `;
+    }
+
     render() {
         this._emptyContent();
+        this._updateStyle();
+
+        this._shadowRoot.appendChild(this._style);
         this._shadowRoot.innerHTML += `
-            <div>
+            <div class="resident-item">
                 <h3>${this._resident.namaLengkap}</h3>
                 <p>${this._resident.dob}</p>
             </div>
