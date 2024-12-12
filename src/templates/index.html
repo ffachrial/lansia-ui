@@ -3,19 +3,27 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="KV2 Application">
     <title>KV2 Application</title>
     
   </head>
   <body>
-    <header>
-      <h1>Posbindu Kopwani Village 2</h1>
+    <header class="app-bar">
+      <div class="app-bar__menu">
+        <button id="hamburgerButton">☰</button>
+      </div>
+  
+      <div class="app-bar__brand">
+        <h1>Posbindu Kopwani Village 2</h1>
+      </div>
+
+      <nav id="navigationDrawer" class="app-bar__navigation">
+        <ul>
+          <li><a href="#/resident-list">Resident List</a></li>
+        </ul>
+      </nav>  
     </header>
-    <main>
-      <!-- Include the custom search-bar component -->
-      <search-bar></search-bar>
-
-      <div id="residentList" class="list"></div>
-
+    <main id="mainContent">
     </main>
     <footer>
       <p>Copyright &copy; 2024</p>
