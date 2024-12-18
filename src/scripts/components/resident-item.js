@@ -1,3 +1,5 @@
+import DateUtils from "../utils/date-utility";
+
 class ResidentItem extends HTMLElement {
     _shadowRoot = null;
     _style = null;
@@ -36,6 +38,12 @@ class ResidentItem extends HTMLElement {
         `;
     }
 
+    connectedCallback() {
+        this._shadowRoot.addEventListener('click', () => {
+            window.location.hash = `#/resident/${this._resident.id}`;
+        });
+    }
+
     render() {
         this._emptyContent();
         this._updateStyle();
@@ -43,8 +51,8 @@ class ResidentItem extends HTMLElement {
         this._shadowRoot.appendChild(this._style);
         this._shadowRoot.innerHTML += `
             <div class="resident-item">
-                <h3>${this._resident.namaLengkap}</h3>
-                <p>${this._resident.dob}</p>
+                <h3>${this._resident.nama_resident}</h3>
+                <p>${DateUtils.calculateAge(this._resident.tgl_lahir)}</p>
             </div>
         `;
     }    

@@ -1,11 +1,10 @@
-import { sampleLansia } from '../../data/sample-lansia.js';
+import KV2SupabaseSource from '../../data/kv2-supabase-source.js';
 
 const ResidentList = {
     async render() {
         // We don't need to render these elements since they're already in index.html
         return `
             <div class="content">
-                <h2>Resident List</h2>
                 <search-bar></search-bar>
                 <div id="residentList" class="list"></div>
             </div>
@@ -22,12 +21,28 @@ const ResidentList = {
             return;
         }
 
-        // Create all resident items and store for filtering
-        const residentItemElements = sampleLansia.map((resident) => {
-            const residentItemElement = document.createElement('resident-item');
-            residentItemElement.resident = resident;
-            return { element: residentItemElement, resident };
-        });
+        // Fetch residents using the data source
+        const fetchResidents = async () => {
+            try {
+                return await KV2SupabaseSource.getAllResidents();
+            } catch (error) {
+                console.error('Error fetching residents:', error);
+                return [];
+            }
+        };
+
+        // Create resident items
+        const createResidentElements = (residents) => {
+            return residents.map((resident) => {
+                const residentItemElement = document.createElement('resident-item');
+                residentItemElement.resident = resident;
+                return { element: residentItemElement, resident };
+            });
+        };
+
+        // Initial fetch and creation of elements
+        const residents = await fetchResidents();
+        const residentItemElements = createResidentElements(residents);
 
         // Function to render filtered residents
         const renderResidents = (filterText) => {
@@ -35,7 +50,7 @@ const ResidentList = {
 
             // Filter and append matching residents
             const filteredResidents = residentItemElements.filter(({ resident }) =>
-                resident.namaLengkap.toLowerCase().includes(filterText.toLowerCase())
+                resident.nama_resident.toLowerCase().includes(filterText.toLowerCase())
             );
 
             filteredResidents.forEach(({ element }) => {
