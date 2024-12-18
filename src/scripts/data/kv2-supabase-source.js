@@ -4,6 +4,23 @@ import { createClient } from "@supabase/supabase-js";
 const supabase = createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
 
 class KV2SupabaseSource {
+    static async getPosbinduResidents() {
+        try {
+            const { data: residents, error } = await supabase
+                .from('resident_kv2')
+                .select('*')
+                .lt('tgl_lahir', new Date(new Date().setFullYear(new Date().getFullYear() - 15)).toISOString().split('T')[0]);
+
+            if (error) {
+                throw error;
+            }
+
+            return residents;
+        } catch (error) {
+            console.error('Error getting residents:', error);
+            throw error;
+        }
+    }
     static async getAllResidents() {
         try {
             const { data: residents, error } = await supabase
