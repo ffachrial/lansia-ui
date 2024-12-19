@@ -24,7 +24,7 @@ const ResidentList = {
         // Fetch residents using the data source
         const fetchResidents = async () => {
             try {
-                return await KV2SupabaseSource.getPosbinduResidents();
+                return await KV2SupabaseSource.getAllResidents();
             } catch (error) {
                 console.error('Error fetching residents:', error);
                 return [];
