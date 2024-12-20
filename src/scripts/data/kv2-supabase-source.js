@@ -23,18 +23,13 @@ class KV2SupabaseSource {
     }
     static async getAllResidents() {
         try {
-            const { data: residents, error } = await supabase
-                .from('resident_kv2')
-                .select('*');
-
-            if (error) {
-                throw error;
-            }
-
+            const { data: residents, error } = await supabase.from('resident_kv2').select('*');
+            if (error) throw error;
             return residents;
         } catch (error) {
             console.error('Error getting residents:', error);
-            throw error;
+            // Provide user feedback here
+            return [];
         }
     }
 
