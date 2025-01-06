@@ -45,6 +45,25 @@ export default function PosyanduDetail() {
 
         const data = await response.json();
         // console.log('Fetched resident data:', data); // Debug log
+
+                // // *** DEBUGGING: Log the unsorted data ***
+                // console.log("Unsorted Data:", JSON.stringify(data.growthData.visitHistory, null, 2));
+
+                // if (data && data.growthData && data.growthData.visitHistory) {
+                //     data.growthData.visitHistory.sort((a, b) => {
+                //         const dateA = new Date(a.date);
+                //         const dateB = new Date(b.date);
+
+                //         // *** DEBUGGING: Log date comparisons ***
+                //         console.log(`Comparing ${a.date} (${dateA}) with ${b.date} (${dateB}): ${dateB - dateA}`);
+
+                //         return dateB - dateA; // Descending order
+                //     });
+                // }
+
+                // // *** DEBUGGING: Log the sorted data ***
+                // console.log("Sorted Data:", JSON.stringify(data.growthData.visitHistory, null, 2));
+
         setResident(data);
       } catch (error) {
         console.error('Error fetching resident:', error);
@@ -141,9 +160,15 @@ export default function PosyanduDetail() {
                 margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
               >
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" />
+                <XAxis 
+                  dataKey="date" 
+                  tickFormatter={(date) => new Date(date).toLocaleDateString('id-ID')}
+                />
                 <YAxis />
-                <Tooltip />
+                <Tooltip 
+                  labelFormatter={(date) => new Date(date).toLocaleDateString('id-ID')}
+                  formatter={(value) => `${value} cm`}
+                />
                 <Legend />
                 <Line type="monotone" dataKey="weight" name="Berat (kg)" stroke="#F59E0B" />
                 <Line type="monotone" dataKey="height" name="Tinggi (cm)" stroke="#10B981" />
@@ -165,21 +190,24 @@ export default function PosyanduDetail() {
 
           {/* Mobile View: Card List UI */}
           <div className="block md:hidden">
-            {resident.growthData.visitHistory.map((visit, index) => (
-              <div key={index} className="flex items-center bg-orange-100 p-4 rounded-lg mb-4">
-                <div className='flex-grow ml-4'>
-                  <p className="text-sm text-amber-900">Tanggal: {visit.date}</p>
-                  <p className="text-sm text-amber-900">BB (kg): {visit.weight}</p>
-                  <p className="text-sm text-amber-900">TB (cm): {visit.height}</p>
-                  <p className="text-sm text-amber-900">LiLa (cm): {visit.armCircumference}</p>
-                  <p className="text-sm text-amber-900">LiKa (cm): {visit.headCircumference}</p>
+            {resident.growthData.visitHistory
+              .slice() // Create a shallow copy to avoid modifying the original array
+              .sort((a, b) => new Date(b.date) - new Date(a.date)) // Sort the copied array
+              .map((visit, index) => (
+                <div key={index} className="flex items-center bg-orange-100 p-4 rounded-lg mb-4">
+                  <div className='flex-grow ml-4'>
+                    <p className="text-sm text-amber-900">Tanggal: {new Date(visit.date).toLocaleDateString('id-ID')}</p>
+                    <p className="text-sm text-amber-900">BB (kg): {visit.weight}</p>
+                    <p className="text-sm text-amber-900">TB (cm): {visit.height}</p>
+                    <p className="text-sm text-amber-900">LiLa (cm): {visit.armCircumference}</p>
+                    <p className="text-sm text-amber-900">LiKa (cm): {visit.headCircumference}</p>
+                  </div>
+                  <div>
+                    <button className="text-sm font-semibold bg-yellow-400 text-amber-900 py-2 px-4 rounded-md hover:bg-yellow-500">
+                      Edit
+                    </button>
+                  </div>
                 </div>
-                <div>
-                  <button className="text-sm font-semibold bg-yellow-400 text-amber-900 py-2 px-4 rounded-md hover:bg-yellow-500">
-                    Edit
-                  </button>
-                </div>
-              </div>
             ))}
           </div>
 
@@ -196,14 +224,17 @@ export default function PosyanduDetail() {
                 </tr>
               </thead>
               <tbody>
-                {resident.growthData.visitHistory.map((visit, index) => (
-                  <tr key={index} className="border-b hover:bg-orange-50">
-                    <td className="px-4 py-2">{visit.date}</td>
-                    <td className="px-4 py-2">{visit.weight}</td>
-                    <td className="px-4 py-2">{visit.height}</td>
-                    <td className="px-4 py-2">{visit.armCircumference}</td>
-                    <td className="px-4 py-2">{visit.headCircumference}</td>
-                  </tr>
+                {resident.growthData.visitHistory
+                  .slice() // Create a shallow copy to avoid modifying the original array
+                  .sort((a, b) => new Date(b.date) - new Date(a.date)) // Sort the copied array
+                  .map((visit, index) => (
+                    <tr key={index} className="border-b hover:bg-orange-50">
+                      <td className="px-4 py-2">{new Date(visit.date).toLocaleDateString('id-ID')}</td>
+                      <td className="px-4 py-2">{visit.weight}</td>
+                      <td className="px-4 py-2">{visit.height}</td>
+                      <td className="px-4 py-2">{visit.armCircumference}</td>
+                      <td className="px-4 py-2">{visit.headCircumference}</td>
+                    </tr>
                 ))}
               </tbody>
             </table>

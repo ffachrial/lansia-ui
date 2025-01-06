@@ -3,24 +3,16 @@ import clientPromise from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
 import { getGender } from '@/lib/helpers';
 
-export async function GET(request, context) {
+export async function GET(request, { params}) {
   try {
-    // Properly extract id from context
-    // const id = context.params.id;
-
     // Await clientPromise before accessing params
     const client = await clientPromise;
-    // console.log('client connected:', !!client); // Check client connection
-    // console.log('context.params:', await context.params); // Inspect params before destructuring
-    
-    // Now destructure params.id after database connection
-    const { params: { id } } = await context; 
 
     const db = client.db(process.env.MONGODB_DB);
     
     const resident = await db
       .collection("resident")
-      .findOne({ _id: new ObjectId(id) });
+      .findOne({ _id: new ObjectId(params.id) });
 
     if (!resident) {
       return new Response(
@@ -56,7 +48,7 @@ export async function GET(request, context) {
         armCircumference: resident.growth_data.lingkar_lengan_resident,
         headCircumference: resident.growth_data.lingkar_kepala_resident,
         visitHistory: resident.growth_data.visit_history.map(visit => ({
-          date: new Date(visit.visit_date).toLocaleDateString('id-ID'),
+          date: visit.visit_date,
           weight: visit.berat_badan,
           height: visit.tinggi_badan,
           armCircumference: visit.lingkar_lengan,
