@@ -1,6 +1,7 @@
 // app/api/posyandu/[id]/route.js
 import clientPromise from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
+import { getGender } from '@/lib/helpers';
 
 export async function GET(request, context) {
   try {
@@ -39,7 +40,8 @@ export async function GET(request, context) {
       id: resident._id.toString(),
       name: resident.nama_lengkap,
       age: age,
-      phoneNumber: resident.phonenumber,
+      // phoneNumber: resident.phonenumber,
+      gender: getGender(resident.gender),
       address: `Blok ${resident.alamat.blok} No ${resident.alamat.no_rumah}, RT ${resident.alamat.rt}`,
       growthData: {
         weight: resident.growth_data.berat_badan_resident,

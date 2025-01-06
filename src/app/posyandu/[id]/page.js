@@ -36,7 +36,7 @@ export default function PosyanduDetail() {
         setLoading(true);
         setError(null);
 
-        console.log('Fetching resident with ID:', params.id); // Debug log
+        // console.log('Fetching resident with ID:', params.id); // Debug log
         const response = await fetch(`/api/posyandu/${params.id}`);
 
         if (!response.ok) {
@@ -44,7 +44,7 @@ export default function PosyanduDetail() {
         }
 
         const data = await response.json();
-        console.log('Fetched resident data:', data); // Debug log
+        // console.log('Fetched resident data:', data); // Debug log
         setResident(data);
       } catch (error) {
         console.error('Error fetching resident:', error);
@@ -100,7 +100,7 @@ export default function PosyanduDetail() {
             <div>
               <h1 className="text-2xl font-bold text-amber-900">{resident.name}</h1>
               <p className="text-amber-900">{resident.age}</p>
-              <p className="text-amber-900">{resident.phoneNumber}</p>
+              <p className="text-amber-900">{resident.gender}</p>
             </div>
           </div>
         </div>
