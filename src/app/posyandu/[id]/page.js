@@ -4,12 +4,31 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import TabNavigation from '@/components/TabNavigation';
 
 export default function PosyanduDetail() {
   const [resident, setResident] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const params = useParams();
+
+  const tabs = [
+    {
+      name: 'Home',
+      route: '/home',
+      icon: 'M3.75 12l8.25-8.25L20.25 12v6a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18V12z',
+    },
+    {
+      name: 'Posyandu',
+      route: '/posyandu',
+      icon: 'M12 4.5v15m-7.5-7.5h15',
+    },
+    {
+      name: 'Posbindu',
+      route: '/posbindu',
+      icon: 'M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0',
+    },
+  ];
 
   useEffect(() => {
     const fetchResident = async () => {
@@ -136,7 +155,22 @@ export default function PosyanduDetail() {
         {/* Visit History */}
         <div className="bg-white rounded-xl p-6 shadow-sm">
           <h2 className="text-lg font-semibold mb-4 text-amber-900">Riwayat Kunjungan</h2>
-          <div className="overflow-x-auto">
+
+          {/* Mobile View: Card List UI */}
+          <div className="block md:hidden">
+            {resident.growthData.visitHistory.map((visit, index) => (
+              <div key={index} className="bg-orange-100 p-4 rounded-lg mb-4">
+                <p className="text-sm text-amber-900">Tanggal: {visit.date}</p>
+                <p className="text-sm text-amber-900">BB (kg): {visit.weight}</p>
+                <p className="text-sm text-amber-900">TB (cm): {visit.height}</p>
+                <p className="text-sm text-amber-900">LiLA (cm): {visit.armCircumference}</p>
+                <p className="text-sm text-amber-900">LiKa (cm): {visit.headCircumference}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Desktop View: Table UI */}
+          <div className="hidden md:block overflow-x-auto">
             <table className="min-w-full">
               <thead>
                 <tr className="bg-orange-100">
@@ -162,6 +196,9 @@ export default function PosyanduDetail() {
           </div>
         </div>
       </div>
+
+      {/* Tab Navigation */}
+      <TabNavigation tabs={tabs} />
     </div>
   );
 }

@@ -40,7 +40,7 @@ export default function PosyanduPage() {
       const age = searchParams.get('age');
       const query = new URLSearchParams({ rt, age }).toString();
       const { hadirBalita, tidakHadirBalita } = await fetchData(`/api/posyandu?${query}`);
-      console.log('Fetched residents:', { hadirBalita, tidakHadirBalita }); // Debug log
+      // console.log('Fetched residents:', { hadirBalita, tidakHadirBalita }); // Debug log
 
       setHadirBalita(hadirBalita);
       setTidakHadirBalita(tidakHadirBalita);
@@ -69,7 +69,7 @@ export default function PosyanduPage() {
   };
 
   const handleDetailClick = (residentId) => {
-    console.log('Clicking detail for resident:', residentId);
+    // console.log('Clicking detail for resident:', residentId);
     router.push(`/posyandu/${residentId}`);
   };
 
