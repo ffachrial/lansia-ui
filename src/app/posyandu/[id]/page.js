@@ -154,17 +154,31 @@ export default function PosyanduDetail() {
 
         {/* Visit History */}
         <div className="bg-white rounded-xl p-6 shadow-sm">
-          <h2 className="text-lg font-semibold mb-4 text-amber-900">Riwayat Kunjungan</h2>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-semibold mb-4 text-amber-900">Riwayat Kunjungan</h2>
+            <button className="text-amber-900">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+              </svg>
+            </button>
+          </div>
 
           {/* Mobile View: Card List UI */}
           <div className="block md:hidden">
             {resident.growthData.visitHistory.map((visit, index) => (
-              <div key={index} className="bg-orange-100 p-4 rounded-lg mb-4">
-                <p className="text-sm text-amber-900">Tanggal: {visit.date}</p>
-                <p className="text-sm text-amber-900">BB (kg): {visit.weight}</p>
-                <p className="text-sm text-amber-900">TB (cm): {visit.height}</p>
-                <p className="text-sm text-amber-900">LiLA (cm): {visit.armCircumference}</p>
-                <p className="text-sm text-amber-900">LiKa (cm): {visit.headCircumference}</p>
+              <div key={index} className="flex items-center bg-orange-100 p-4 rounded-lg mb-4">
+                <div className='flex-grow ml-4'>
+                  <p className="text-sm text-amber-900">Tanggal: {visit.date}</p>
+                  <p className="text-sm text-amber-900">BB (kg): {visit.weight}</p>
+                  <p className="text-sm text-amber-900">TB (cm): {visit.height}</p>
+                  <p className="text-sm text-amber-900">LiLa (cm): {visit.armCircumference}</p>
+                  <p className="text-sm text-amber-900">LiKa (cm): {visit.headCircumference}</p>
+                </div>
+                <div>
+                  <button className="text-sm font-semibold bg-yellow-400 text-amber-900 py-2 px-4 rounded-md hover:bg-yellow-500">
+                    Edit
+                  </button>
+                </div>
               </div>
             ))}
           </div>
@@ -177,7 +191,7 @@ export default function PosyanduDetail() {
                   <th className="px-4 py-2 text-left text-amber-900">Tanggal</th>
                   <th className="px-4 py-2 text-left text-amber-900">BB (kg)</th>
                   <th className="px-4 py-2 text-left text-amber-900">TB (cm)</th>
-                  <th className="px-4 py-2 text-left text-amber-900">LiLA (cm)</th>
+                  <th className="px-4 py-2 text-left text-amber-900">LiLa (cm)</th>
                   <th className="px-4 py-2 text-left text-amber-900">LiKa (cm)</th>
                 </tr>
               </thead>

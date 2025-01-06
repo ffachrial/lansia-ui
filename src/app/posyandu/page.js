@@ -130,7 +130,7 @@ export default function PosyanduPage() {
           <h2 className="text-lg font-semibold">Balita tidak hadir</h2>
           <a href="#" className="text-sm text-amber-900 hover:underline">See All</a>
         </div>
-        <div className="space-y-4">
+        <div className="space-y-4 pb-16">
           {filteredTidakHadirBalita.map((resident) => (
             <SearchCard key={resident.name} resident={resident} onDetailClick={() => handleDetailClick(resident.id)} />
           ))}

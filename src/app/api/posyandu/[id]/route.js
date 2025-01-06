@@ -6,9 +6,16 @@ import { getGender } from '@/lib/helpers';
 export async function GET(request, context) {
   try {
     // Properly extract id from context
-    const id = context.params.id;
+    // const id = context.params.id;
 
+    // Await clientPromise before accessing params
     const client = await clientPromise;
+    // console.log('client connected:', !!client); // Check client connection
+    // console.log('context.params:', await context.params); // Inspect params before destructuring
+    
+    // Now destructure params.id after database connection
+    const { params: { id } } = await context; 
+
     const db = client.db(process.env.MONGODB_DB);
     
     const resident = await db

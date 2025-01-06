@@ -13,7 +13,7 @@ export default function SearchCard({ resident, onDetailClick }) {
       </div>
       <div>
         <button 
-          className="text-sm bg-yellow-400 text-amber-900 py-2 px-4 rounded-md hover:bg-yellow-500"
+          className="text-sm font-semibold bg-yellow-400 text-amber-900 py-2 px-4 rounded-md hover:bg-yellow-500"
           onClick={() => {
             // console.log('Detail button clicked for resident:', resident.id);
             onDetailClick();
