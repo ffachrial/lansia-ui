@@ -5,7 +5,7 @@ export async function GET(request) {
   try {
     // Connect to the database
     const client = await clientPromise;
-    const db = client.db(process.env.MONGODB_DB);
+    const db = client.db(process.env.DATABASE_NAME);
 
     // Parse query parameters
     const url = new URL(request.url);

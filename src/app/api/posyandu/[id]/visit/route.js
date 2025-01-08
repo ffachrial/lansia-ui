@@ -22,7 +22,7 @@ export async function PUT(req, { params }) {
     }
 
     const client = await clientPromise;
-    const db = client.db(process.env.MONGODB_DB); // Replace with your database name if needed
+    const db = client.db(process.env.DATABASE_NAME); // Replace with your database name if needed
     const residentsCollection = db.collection("resident"); // Replace with your collection name
 
     // Update the visit record in the resident's visit history

@@ -8,7 +8,7 @@ export async function GET(request, { params}) {
     // Await clientPromise before accessing params
     const client = await clientPromise;
 
-    const db = client.db(process.env.MONGODB_DB);
+    const db = client.db(process.env.DATABASE_NAME);
     
     const resident = await db
       .collection("resident")
