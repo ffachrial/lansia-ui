@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import TabNavigation from '@/components/TabNavigation';
+import VisitHistoryCard from '@/components/VisitHistoryCard';
 
 export default function PosyanduDetail() {
   const [resident, setResident] = useState(null);
@@ -30,48 +31,29 @@ export default function PosyanduDetail() {
     },
   ];
 
-  useEffect(() => {
-    const fetchResident = async () => {
-      try {
-        setLoading(true);
-        setError(null);
+  const fetchResident = async () => {
+    try {
+      setLoading(true);
+      setError(null);
 
-        // console.log('Fetching resident with ID:', params.id); // Debug log
-        const response = await fetch(`/api/posyandu/${params.id}`);
+      const response = await fetch(`/api/posyandu/${params.id}`);
 
-        if (!response.ok) {
-            throw new Error('Failed to fetch resident');
-        }
-
-        const data = await response.json();
-        // console.log('Fetched resident data:', data); // Debug log
-
-                // // *** DEBUGGING: Log the unsorted data ***
-                // console.log("Unsorted Data:", JSON.stringify(data.growthData.visitHistory, null, 2));
-
-                // if (data && data.growthData && data.growthData.visitHistory) {
-                //     data.growthData.visitHistory.sort((a, b) => {
-                //         const dateA = new Date(a.date);
-                //         const dateB = new Date(b.date);
-
-                //         // *** DEBUGGING: Log date comparisons ***
-                //         console.log(`Comparing ${a.date} (${dateA}) with ${b.date} (${dateB}): ${dateB - dateA}`);
-
-                //         return dateB - dateA; // Descending order
-                //     });
-                // }
-
-                // // *** DEBUGGING: Log the sorted data ***
-                // console.log("Sorted Data:", JSON.stringify(data.growthData.visitHistory, null, 2));
-
-        setResident(data);
-      } catch (error) {
-        console.error('Error fetching resident:', error);
-      } finally {
-        setLoading(false);
+      if (!response.ok) {
+        throw new Error('Failed to fetch resident');
       }
-    };
 
+      const data = await response.json();
+      // console.log('Resident data:', data);
+      setResident(data);
+    } catch (error) {
+      console.error('Error fetching resident:', error);
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     if (params.id) {
       fetchResident();
     }
@@ -194,20 +176,12 @@ export default function PosyanduDetail() {
               .slice() // Create a shallow copy to avoid modifying the original array
               .sort((a, b) => new Date(b.date) - new Date(a.date)) // Sort the copied array
               .map((visit, index) => (
-                <div key={index} className="flex items-center bg-orange-100 p-4 rounded-lg mb-4">
-                  <div className='flex-grow ml-4'>
-                    <p className="text-sm text-amber-900">Tanggal: {new Date(visit.date).toLocaleDateString('id-ID')}</p>
-                    <p className="text-sm text-amber-900">BB (kg): {visit.weight}</p>
-                    <p className="text-sm text-amber-900">TB (cm): {visit.height}</p>
-                    <p className="text-sm text-amber-900">LiLa (cm): {visit.armCircumference}</p>
-                    <p className="text-sm text-amber-900">LiKa (cm): {visit.headCircumference}</p>
-                  </div>
-                  <div>
-                    <button className="text-sm font-semibold bg-yellow-400 text-amber-900 py-2 px-4 rounded-md hover:bg-yellow-500">
-                      Edit
-                    </button>
-                  </div>
-                </div>
+              <VisitHistoryCard
+                key={index}
+                visit={visit}
+                residentId={params.id}
+                onUpdateSuccess={fetchResident} // Refresh data on successful update
+              />
             ))}
           </div>
 
