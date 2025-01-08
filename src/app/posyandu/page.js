@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation'; // Import useRouter and useSearchParams for navigation
+import { useRouter } from 'next/navigation'; // Import useRouter and useSearchParams for navigation
 import TabNavigation from '@/components/TabNavigation';
 import SearchCard from '@/components/SearchCard';
 import { fetchData } from '@/lib/fetchData'; // A helper function for fetching data from the API
@@ -14,7 +14,6 @@ export default function PosyanduPage() {
   const [filteredTidakHadirBalita, setFilteredTidakHadirBalita] = useState([]);
 
   const router = useRouter(); // Initialize useRouter for navigation
-  const searchParams = useSearchParams(); // Initialize useSearchParams to get query parameters
 
   const tabs = [
     {
@@ -36,8 +35,9 @@ export default function PosyanduPage() {
 
   useEffect(() => {
     const fetchResidents = async () => {
-      const rt = searchParams.get('rt');
-      const age = searchParams.get('age');
+      const urlParams = new URLSearchParams(window.location.search);
+      const rt = urlParams.get('rt');
+      const age = urlParams.get('age');
       const query = new URLSearchParams({ rt, age }).toString();
       const { hadirBalita, tidakHadirBalita } = await fetchData(`/api/posyandu?${query}`);
       // console.log('Fetched residents:', { hadirBalita, tidakHadirBalita }); // Debug log
@@ -48,7 +48,7 @@ export default function PosyanduPage() {
       setFilteredTidakHadirBalita(tidakHadirBalita);
     };
     fetchResidents();
-  }, [searchParams]);
+  }, []);
 
   useEffect(() => {
     const lowercasedQuery = searchQuery.toLowerCase();
