@@ -1,6 +1,6 @@
 import { MongoClient } from "mongodb";
 
-const uri = process.env.MONGODB_URI;
+const uri = process.env.DATABASE_CONNECTION_STRING;
 const options = {};
 
 if (!uri) {
