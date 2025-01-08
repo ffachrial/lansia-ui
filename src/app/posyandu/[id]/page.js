@@ -43,7 +43,7 @@ export default function PosyanduDetail() {
       }
 
       const data = await response.json();
-      // console.log('Resident data:', data);
+      console.log('Resident data:', data);  // Debug log
       setResident(data);
     } catch (error) {
       console.error('Error fetching resident:', error);

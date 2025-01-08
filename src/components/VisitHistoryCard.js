@@ -9,7 +9,7 @@ export default function VisitHistoryCard({ visit, residentId, onUpdateSuccess })
   const [isSaving, setIsSaving] = useState(false);
   const [editedVisit, setEditedVisit] = useState(visit);
   const [error, setError] = useState("");
-
+  
   const handleInputChange = (field, value) => {
     if (field === "date" && value instanceof Date) {
         setEditedVisit((prev) => ({
@@ -38,16 +38,29 @@ export default function VisitHistoryCard({ visit, residentId, onUpdateSuccess })
     try {
       setIsSaving(true);
       setError("");
-      console.log("editedVisit", editedVisit);
+      
+      // Transform the data to match the MongoDB structure
+      const updatedVisitData = {
+        visit_date: editedVisit.date,
+        tinggi_badan: editedVisit.height,
+        berat_badan: editedVisit.weight,
+        lingkar_kepala: editedVisit.headCircumference,
+        lingkar_lengan: editedVisit.armCircumference,
+        _id: visit.id // Include the visit history ID
+      };
+
+      // Debug log
+      console.log("Sending data:", {
+        residentId,
+        updatedVisitData
+      });
+
       const response = await fetch(`/api/posyandu/${residentId}/visit`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          visitDate: new Date(visit.date).toISOString(),
-          updatedVisit: editedVisit,
-        }),
+        body: JSON.stringify(updatedVisitData),
       });
 
       if (!response.ok) {

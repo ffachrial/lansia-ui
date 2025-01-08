@@ -3,7 +3,7 @@
 export async function fetchData(endpoint) {
     try {
       const response = await fetch(endpoint);
-      console.log('Endpoint:', endpoint); // Debug log
+      
       if (!response.ok) {
         throw new Error(`Failed to fetch data: ${response.statusText}`);
       }
