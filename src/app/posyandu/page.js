@@ -2,8 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation'; // Import useRouter and useSearchParams for navigation
+
 import TabNavigation from '@/components/TabNavigation';
 import SearchCard from '@/components/SearchCard';
+import { tabs } from '@/components/TabConstant';
+
 import { fetchData } from '@/lib/fetchData'; // A helper function for fetching data from the API
 
 export default function PosyanduPage() {
@@ -15,23 +18,23 @@ export default function PosyanduPage() {
 
   const router = useRouter(); // Initialize useRouter for navigation
 
-  const tabs = [
-    {
-      name: 'Home',
-      route: '/home',
-      icon: 'M3.75 12l8.25-8.25L20.25 12v6a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18V12z',
-    },
-    {
-      name: 'Posyandu',
-      route: '/posyandu?rt=&age=',
-      icon: 'M12 4.5v15m-7.5-7.5h15',
-    },
-    {
-      name: 'Posbindu',
-      route: '/posbindu',
-      icon: 'M12 2a9 9 0 100 18 9 9 0 000-18z',
-    },
-  ];
+  // const tabs = [
+  //   {
+  //     name: 'Home',
+  //     route: '/home',
+  //     icon: 'M3.75 12l8.25-8.25L20.25 12v6a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18V12z',
+  //   },
+  //   {
+  //     name: 'Posyandu',
+  //     route: '/posyandu?rt=&age=',
+  //     icon: 'M12 4.5v15m-7.5-7.5h15',
+  //   },
+  //   {
+  //     name: 'Posbindu',
+  //     route: '/posbindu',
+  //     icon: 'M12 2a9 9 0 100 18 9 9 0 000-18z',
+  //   },
+  // ];
 
   useEffect(() => {
     const fetchResidents = async () => {

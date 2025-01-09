@@ -4,32 +4,44 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+
 import TabNavigation from '@/components/TabNavigation';
 import VisitHistoryCard from '@/components/VisitHistoryCard';
+import { tabs } from '@/components/TabConstant';
 
 export default function PosyanduDetail() {
   const [resident, setResident] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const [showNewVisitCard, setShowNewVisitCard] = useState(false);
+  const [newVisit, setNewVisit] = useState({
+    date: '',
+    weight: '',
+    height: '',
+    armCircumference: '',
+    headCircumference: '',
+  });
+
   const params = useParams();
 
-  const tabs = [
-    {
-      name: 'Home',
-      route: '/home',
-      icon: 'M3.75 12l8.25-8.25L20.25 12v6a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18V12z',
-    },
-    {
-      name: 'Posyandu',
-      route: '/posyandu?rt=&age=',
-      icon: 'M12 4.5v15m-7.5-7.5h15',
-    },
-    {
-      name: 'Posbindu',
-      route: '/posbindu',
-      icon: 'M12 2a9 9 0 100 18 9 9 0 000-18z',
-    },
-  ];
+  // const tabs = [
+  //   {
+  //     name: 'Home',
+  //     route: '/home',
+  //     icon: 'M3.75 12l8.25-8.25L20.25 12v6a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18V12z',
+  //   },
+  //   {
+  //     name: 'Posyandu',
+  //     route: '/posyandu?rt=&age=',
+  //     icon: 'M12 4.5v15m-7.5-7.5h15',
+  //   },
+  //   {
+  //     name: 'Posbindu',
+  //     route: '/posbindu',
+  //     icon: 'M12 2a9 9 0 100 18 9 9 0 000-18z',
+  //   },
+  // ];
 
   const fetchResident = async () => {
     try {
@@ -43,13 +55,34 @@ export default function PosyanduDetail() {
       }
 
       const data = await response.json();
-      console.log('Resident data:', data);  // Debug log
+      // console.log('Resident data:', data);  // Debug log
       setResident(data);
     } catch (error) {
       console.error('Error fetching resident:', error);
       setError(error.message);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleSaveNewVisit = async () => {
+    try {
+      console.log('Saving new visit:', newVisit); // Debug log
+      const response = await fetch(`/api/posyandu/${params.id}/new-visit`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newVisit),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to save new visit");
+      }
+
+      setShowNewVisitCard(false);
+      setNewVisit({ date: '', weight: '', height: '', armCircumference: '', headCircumference: '' });
+      fetchResident(); // Refresh data
+    } catch (error) {
+      setError('Error saving new visit: ' + error.message);
     }
   };
 
@@ -163,12 +196,66 @@ export default function PosyanduDetail() {
         <div className="bg-white rounded-xl p-6 shadow-sm">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold mb-4 text-amber-900">Riwayat Kunjungan</h2>
-            <button className="text-amber-900">
+            <button onClick={() => setShowNewVisitCard(true)} className="text-amber-900">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
               </svg>
             </button>
           </div>
+
+          {/* Mobile View: New Card UI */}
+          {showNewVisitCard && (
+            <div className="bg-orange-100 p-6 rounded-lg mb-4">
+              <div className="grid grid-cols-1 gap-4">
+                <input
+                  type="date"
+                  className="p-2 rounded border"
+                  value={newVisit.date}
+                  onChange={(e) => setNewVisit({ ...newVisit, date: e.target.value })}
+                />
+                <input
+                  type="number"
+                  className="p-2 rounded border"
+                  placeholder="BB (kg)"
+                  value={newVisit.weight}
+                  onChange={(e) => setNewVisit({ ...newVisit, weight: e.target.value })}
+                />
+                <input
+                  type="number"
+                  className="p-2 rounded border"
+                  placeholder="TB (cm)"
+                  value={newVisit.height}
+                  onChange={(e) => setNewVisit({ ...newVisit, height: e.target.value })}
+                />
+                <input
+                  type="number"
+                  className="p-2 rounded border"
+                  placeholder="LiLa (cm)"
+                  value={newVisit.armCircumference}
+                  onChange={(e) => setNewVisit({ ...newVisit, armCircumference: e.target.value })}
+                />
+                <input
+                  type="number"
+                  className="p-2 rounded border"
+                  placeholder="LiKa (cm)"
+                  value={newVisit.headCircumference}
+                  onChange={(e) => setNewVisit({ ...newVisit, headCircumference: e.target.value })}
+                />
+              </div>
+              <div className="flex space-x-4 mt-4">
+                <button onClick={handleSaveNewVisit} className="px-4 py-2 bg-green-500 text-white rounded">Save</button>
+                <button
+                  onClick={() => {
+                    setShowNewVisitCard(false);
+                    setNewVisit({ date: '', weight: '', height: '', armCircumference: '', headCircumference: '' });
+                  }}
+                  className="px-4 py-2 bg-red-500 text-white rounded"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+        )}
 
           {/* Mobile View: Card List UI */}
           <div className="block md:hidden">

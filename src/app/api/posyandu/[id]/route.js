@@ -7,8 +7,12 @@ export async function GET(request, { params}) {
   try {
     // Await clientPromise before accessing params
     const client = await clientPromise;
-
+    await client.connect(); // Ensure the client is fully connected
     const db = client.db(process.env.DATABASE_NAME);
+
+    // Debug: Verify client and DB
+    console.log("Client Connection Established:", Boolean(client));
+    console.log("Database Name:", process.env.DATABASE_NAME);
     
     const resident = await db
       .collection("resident")
@@ -68,6 +72,19 @@ export async function GET(request, { params}) {
     );
   } catch (error) {
     console.error('Error fetching resident:', error);
+
+    // // Attempt reinitialization if client fails
+    // if (error.name === "MongoNotConnectedError") {
+    //   console.log("Reinitializing MongoDB client...");
+    //   const newClient = new MongoClient(process.env.DATABASE_CONNECTION_STRING);
+    //   await newClient.connect();
+    //   const db = newClient.db(process.env.DATABASE_NAME);
+
+    //   const resident = await db.collection("resident").findOne({ _id: new ObjectId(params.id) });
+    // }
+
+    // throw error;
+
     return new Response(
       JSON.stringify({ error: 'Failed to fetch resident' }),
       { status: 500 }
