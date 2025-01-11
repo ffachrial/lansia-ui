@@ -25,24 +25,6 @@ export default function PosyanduDetail() {
 
   const params = useParams();
 
-  // const tabs = [
-  //   {
-  //     name: 'Home',
-  //     route: '/home',
-  //     icon: 'M3.75 12l8.25-8.25L20.25 12v6a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18V12z',
-  //   },
-  //   {
-  //     name: 'Posyandu',
-  //     route: '/posyandu?rt=&age=',
-  //     icon: 'M12 4.5v15m-7.5-7.5h15',
-  //   },
-  //   {
-  //     name: 'Posbindu',
-  //     route: '/posbindu',
-  //     icon: 'M12 2a9 9 0 100 18 9 9 0 000-18z',
-  //   },
-  // ];
-
   const fetchResident = async () => {
     try {
       setLoading(true);
@@ -85,6 +67,35 @@ export default function PosyanduDetail() {
       setError('Error saving new visit: ' + error.message);
     }
   };
+
+  const handlePresenceChange = async (e) => {
+    try {
+      const newPresenceValue = e.target.checked;
+      console.log('Updating presence to:', newPresenceValue);  // Debug log
+
+      const response = await fetch(`/api/posyandu/${params.id}/update-hadir`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ hadirResident: newPresenceValue }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update status");
+      }
+
+      // Update local state
+      setResident((prev) => ({
+        ...prev,
+        growthData: {
+          ...prev.growthData,
+          residentPresence: newPresenceValue,
+        },
+      }));
+    } catch (error) {
+      console.error("Error updating hadirResident:", error);
+    }
+  };
+
 
   useEffect(() => {
     if (params.id) {
@@ -135,6 +146,24 @@ export default function PosyanduDetail() {
               <h1 className="text-2xl font-bold text-amber-900">{resident.name}</h1>
               <p className="text-amber-900">{resident.age}</p>
               <p className="text-amber-900">{resident.gender}</p>
+
+              <label className="relative inline-flex cursor-pointer items-center">
+                <input
+                  type="checkbox"
+                  className="peer sr-only"
+                  checked={resident.growthData.residentPresence}
+                  onChange={handlePresenceChange}
+                />
+                <div className={`peer flex h-8 items-center gap-4 rounded-full px-3 after:absolute after:left-1 after:h-6 after:w-16 after:rounded-full after:bg-white/40 after:transition-all after:content-[''] peer-focus:outline-none dark:border-slate-600 dark:bg-slate-700 text-sm text-white
+                  ${resident.growthData.residentPresence ? 'bg-stone-600 after:translate-x-full' : 'bg-orange-600'}`}>
+                  <span className={resident.growthData.residentPresence ? 'opacity-100' : 'opacity-0'}>
+                    Hadir
+                  </span>
+                  <span className={resident.growthData.residentPresence ? 'opacity-0' : 'opacity-100'}>
+                    Tidak Hadir
+                  </span>
+                </div>
+              </label>
             </div>
           </div>
         </div>

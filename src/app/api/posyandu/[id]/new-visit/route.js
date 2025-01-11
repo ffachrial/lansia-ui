@@ -32,8 +32,8 @@ export async function POST(req) {
     const formattedNewVisit = {
         _id: residentObjectId.toString(),
         visit_date: new Date(newVisit.date),
-        tinggi_badan: parseFloat(newVisit.height),
-        berat_badan: parseFloat(newVisit.weight),
+        tinggi_badan: parseFloat(newVisit.height) || null,
+        berat_badan: parseFloat(newVisit.weight) || null,
         lingkar_kepala: parseFloat(newVisit.headCircumference) || null,
         lingkar_lengan: parseFloat(newVisit.armCircumference) || null
     };

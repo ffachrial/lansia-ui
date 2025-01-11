@@ -51,6 +51,7 @@ export async function GET(request, { params}) {
         height: resident.growth_data.tinggi_badan_resident,
         armCircumference: resident.growth_data.lingkar_lengan_resident,
         headCircumference: resident.growth_data.lingkar_kepala_resident,
+        residentPresence: resident.growth_data.hadir_resident,
         visitHistory: resident.growth_data.visit_history.map(visit => ({
           id: visit._id.toString(),
           date: visit.visit_date,
